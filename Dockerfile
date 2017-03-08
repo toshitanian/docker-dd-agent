@@ -6,11 +6,12 @@ ENV DOCKER_DD_AGENT=yes \
     AGENT_VERSION=1:5.11.2-1
 
 # Install the Agent
-RUN echo "deb http://apt.datadoghq.com/ stable main" > /etc/apt/sources.list.d/datadog.list \
+RUN apt-get update \
+ && apt-get install --no-install-recommends -y apt-transport-https ca-certificates \
+ && echo "deb https://apt.datad0g.com/ beta main" > /etc/apt/sources.list.d/datadog.list \
  && apt-key adv --keyserver keyserver.ubuntu.com --recv-keys C7A7DA52 \
  && apt-get update \
- && apt-get install --no-install-recommends -y datadog-agent="${AGENT_VERSION}" \
- && apt-get install --no-install-recommends -y ca-certificates \
+ && apt-get install --no-install-recommends -y datadog-agent \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 

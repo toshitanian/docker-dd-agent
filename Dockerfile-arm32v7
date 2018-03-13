@@ -28,29 +28,29 @@ RUN DD_SKIP_INTEGRATIONS=1 sh /tmp/setup_agent.sh \
 
 
 # Add healthcheck script
-# COPY probe-alpine.sh $DD_HOME/probe.sh
+COPY probe-alpine.sh $DD_HOME/probe.sh
 
 # Configure the Agent
 # and make healthcheck script executable
-#RUN cp ${DD_ETC_ROOT}/datadog.conf.example ${DD_ETC_ROOT}/datadog.conf \
-#  && chmod +x $DD_HOME/probe.sh
+RUN cp ${DD_ETC_ROOT}/datadog.conf.example ${DD_ETC_ROOT}/datadog.conf \
+  && chmod +x $DD_HOME/probe.sh
 
 # Add Docker check
-#COPY conf.d/docker_daemon.yaml "${DD_ETC_ROOT}/conf.d/docker_daemon.yaml"
+COPY conf.d/docker_daemon.yaml "${DD_ETC_ROOT}/conf.d/docker_daemon.yaml"
 # Add install and config files
-#COPY entrypoint.sh /entrypoint.sh
-#COPY config_builder.py /config_builder.py
+COPY entrypoint.sh /entrypoint.sh
+COPY config_builder.py /config_builder.py
 
 # Extra conf.d and checks.d
-#VOLUME ["/conf.d", "/checks.d"]
+VOLUME ["/conf.d", "/checks.d"]
 
 # Expose DogStatsD and trace-agent ports
-#EXPOSE 8125/udp 8126/tcp
+EXPOSE 8125/udp 8126/tcp
 
 # Healthcheck
-#HEALTHCHECK --interval=5m --timeout=3s --retries=1 \
-#  CMD ./probe.sh
+HEALTHCHECK --interval=5m --timeout=3s --retries=1 \
+  CMD ./probe.sh
 
-#ENTRYPOINT ["/entrypoint.sh"]i
-#WORKDIR $DD_HOME
-#CMD ["supervisord", "-c", "agent/supervisor.conf"]
+ENTRYPOINT ["/entrypoint.sh"]
+WORKDIR $DD_HOME
+CMD ["supervisord", "-c", "agent/supervisor.conf"]
